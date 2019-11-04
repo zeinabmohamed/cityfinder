@@ -1,5 +1,6 @@
 package com.zm.org.cityfinder.ui.main;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zm.org.cityfinder.R;
+import com.zm.org.cityfinder.databinding.CitiesListFragmentBinding;
 
 public class CitiesListFragment extends Fragment {
 
@@ -26,14 +28,19 @@ public class CitiesListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.cities_list_fragment, container, false);
+
+        CitiesListFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.cities_list_fragment , container, false);
+        binding.setViewModel(citiesListViewModel);
+        return binding.getRoot();
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         citiesListViewModel = ViewModelProviders.of(this).get(CitiesListViewModel.class);
-        // TODO: Use the ViewModel
+        citiesListViewModel.loadCities(getContext());
+
     }
 
 }
