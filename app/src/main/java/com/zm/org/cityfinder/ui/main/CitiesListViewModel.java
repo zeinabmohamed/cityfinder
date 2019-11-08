@@ -68,28 +68,43 @@ public class CitiesListViewModel extends ViewModel {
             @Override
             public void onChanged(final String searchQueryText) {
 
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
 
                         Log.i("data", "start searchQueryTextLiveData  : searchQueryText " + searchQueryText);
 
-                        if (!searchQueryText.equals(lastSearchQuery)) {
-                            List citiesList = new ArrayList(citiesListResponseLiveData.getValue());
-
-                            ListIterator<CityData> cityDataIterator = citiesList.listIterator();
-                            while (cityDataIterator.hasNext()) {
-
-                                CityData cityItem = cityDataIterator.next();
-                                if (!cityItem.name.startsWith(searchQueryText) && !cityItem.country.startsWith(searchQueryText)) {
-                                    cityDataIterator.remove();
-                                }
-                            }
-                            Log.i("data", "end searchQueryTextLiveData  : searchQueryText " + searchQueryText);
-
-                            lastSearchQuery = searchQueryText;
-                            cityDataListLiveData.postValue(citiesList);
+                        if( searchQueryText.equals(lastSearchQuery)){
+                            // do nothing as it's same result
+                            return ;
                         }
+                        if (citiesListResponseLiveData.getValue() != null && !citiesListResponseLiveData.getValue().isEmpty() ) {
+
+                            // as long we sort the data we don't need to check all of the data
+                            // so we will cut the list from the starting from index of searchTextQuery
+
+                            CityData cityData = new CityData();
+                            cityData.name = searchQueryText;
+
+
+                            int startIndex  = citiesListResponseLiveData.getValue().indexOf(cityData);
+                            int lastIndex  = citiesListResponseLiveData.getValue().lastIndexOf(cityData);
+
+                            if(startIndex >= 0 &&  lastIndex >=0 &&  (lastIndex<= citiesListResponseLiveData.getValue().size()-1)){
+                                // we add +1 for last index to include this item in filtered result
+                                List citiesList = citiesListResponseLiveData.getValue().subList(startIndex,lastIndex+1);
+                                Log.i("data", "end searchQueryTextLiveData  : searchQueryText " + searchQueryText);
+
+                                lastSearchQuery = searchQueryText.toLowerCase();
+                                cityDataListLiveData.postValue(citiesList);
+                                return ;
+                            }
+
+                        }
+                        // if not success to get filtered result will post original one
+                        cityDataListLiveData.postValue(citiesListResponseLiveData.getValue());
+
                     }
                 }).start();
             }

@@ -1,5 +1,7 @@
 package com.zm.org.cityfinder.model.dto;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class CityData {
@@ -30,5 +32,10 @@ public class CityData {
         public double lon;
         @SerializedName("lat")
         public double lat;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return ((CityData)obj).name.toLowerCase().startsWith(this.name.toLowerCase());
     }
 }
