@@ -3,7 +3,6 @@ package com.zm.org.cityfinder.model;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
@@ -13,6 +12,8 @@ import com.zm.org.cityfinder.model.dto.CityData;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CitiesDataSource {
@@ -32,7 +33,17 @@ public class CitiesDataSource {
                     }.getType();
                     List<CityData> cityDataList = new Gson().fromJson(citiesJson, listType);
 
-                    Log.i("data ", "Thread " + cityDataList.size());
+                    Log.i("data", "Load json cities " + cityDataList.size());
+                    // sort data city name 1'st then city country
+
+                    Collections.sort(cityDataList, new Comparator<CityData>() {
+                        @Override
+                        public int compare(CityData cityData0, CityData cityData1) {
+
+                            return (cityData0.name.concat(cityData0.country)).compareToIgnoreCase((cityData1.name.concat(cityData1.country)));
+                        }
+                    });
+
                     citiesListResponseLiveData.postValue(cityDataList);
 
                 } catch (IOException e) {

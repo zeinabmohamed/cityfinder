@@ -26,7 +26,9 @@
         android:background="@android:drawable/editbox_background_normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryTextListener="@{viewModel.onQueryTextListener}"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
