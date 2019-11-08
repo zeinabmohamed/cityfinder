@@ -1,8 +1,7 @@
 package com.zm.org.cityfinder.model;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -17,13 +16,11 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class CitiesDataSource {
-    public MutableLiveData<List<CityData>> loadCities(final Context context) {
 
-        final MutableLiveData<List<CityData>> citiesListResponseLiveData = new MutableLiveData();
-        new AsyncTask<Void, Void, List<CityData>>() {
-
+    public void loadCities(final MutableLiveData<List<CityData>> citiesListResponseLiveData, final Context context) {
+        new Thread(new Runnable() {
             @Override
-            protected List<CityData> doInBackground(Void... voids) {
+            public void run() {
                 try {
                     InputStream inputStream = context.getAssets().open("cities.json");
                     int size = inputStream.available();
@@ -31,24 +28,20 @@ public class CitiesDataSource {
                     inputStream.read(buffer);
                     inputStream.close();
                     String citiesJson = new String(buffer);
-                    Type listType = new TypeToken<List<CityData>>() {}.getType();
-                    List<CityData> cityDataList = new Gson().fromJson(citiesJson,listType);
+                    Type listType = new TypeToken<List<CityData>>() {
+                    }.getType();
+                    List<CityData> cityDataList = new Gson().fromJson(citiesJson, listType);
 
-                    return cityDataList;
+                    Log.i("data ", "Thread " + cityDataList.size());
+                    citiesListResponseLiveData.postValue(cityDataList);
+
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return null;
+                    citiesListResponseLiveData.postValue(null);
                 }
             }
-
-            @Override
-            protected void onPostExecute(List<CityData> data) {
-                Toast.makeText(context,"data "+data.size(),Toast.LENGTH_SHORT).show();
-                citiesListResponseLiveData.setValue(data);
-            }
-        }.execute();
+        }).start();
 
 
-        return citiesListResponseLiveData;
     }
 }
