@@ -2,6 +2,7 @@ package com.zm.org.cityfinder.ui.citieslist;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.MediatorLiveData;
@@ -22,6 +23,7 @@ public class CitiesListViewModel extends ViewModel {
 
     private CitiesDataSource citiesDataSource = new CitiesDataSource();
     private MutableLiveData<String> searchQueryTextLiveData = new MutableLiveData();
+    public MutableLiveData<Integer> progressBarVisibilityLiveData = new MutableLiveData();
 
     public CitiesListViewModel() {
         cityDataListLiveData = new MediatorLiveData();
@@ -45,13 +47,13 @@ public class CitiesListViewModel extends ViewModel {
     public void loadCities(final Context context) {
 
         citiesListResponseLiveData = new MutableLiveData<>();
-
+        progressBarVisibilityLiveData.postValue(View.VISIBLE);
         citiesDataSource.loadCities(citiesListResponseLiveData, context);
         cityDataListLiveData.addSource(citiesListResponseLiveData, new Observer<LinkedList<CityData>>() {
             @Override
             public void onChanged(LinkedList<CityData> cityData) {
                 Log.i("data", "citiesListResponseLiveData : " + cityData.size());
-                cityDataListLiveData.postValue(cityData);
+                updateViewWithData(cityData);
             }
         });
 
@@ -68,7 +70,8 @@ public class CitiesListViewModel extends ViewModel {
 
                             if (searchQueryText.isEmpty()) {
                                 // should update with whole list
-                                cityDataListLiveData.postValue(citiesListResponseLiveData.getValue());
+                                updateViewWithData(citiesListResponseLiveData.getValue());
+
                                 return;
                             }
 
@@ -84,7 +87,7 @@ public class CitiesListViewModel extends ViewModel {
 
                             // if not success to get filtered result will empty list
                             if (startIndex == -1) {
-                                cityDataListLiveData.postValue(citiesList);
+                                updateViewWithData(citiesList);
                                 return;
                             }
                             citiesList = citiesListResponseLiveData.getValue().subList(startIndex, citiesListResponseLiveData.getValue().size() - 1);
@@ -94,17 +97,24 @@ public class CitiesListViewModel extends ViewModel {
 
                             // if not success to get filtered result will empty list
                             if (lastIndex == -1) {
-                                cityDataListLiveData.postValue(citiesList);
+                                updateViewWithData(citiesList);
                                 return;
                             }
 
                             // we add +1 for last index to include this item in filtered result
                             citiesList = citiesList.subList(0, lastIndex + 1);
-                            cityDataListLiveData.postValue(citiesList);
+
+                            updateViewWithData(citiesList);
+
                         }
                     }
                 }).start();
             }
         });
+    }
+
+    private void updateViewWithData(List citiesList) {
+        cityDataListLiveData.postValue(citiesList);
+        progressBarVisibilityLiveData.postValue(View.GONE);
     }
 }

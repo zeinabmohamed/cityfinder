@@ -34,10 +34,22 @@
             tools:layout_editor_absoluteX="16dp"
             tools:listitem="@layout/row_city_view" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.progressBarVisibilityLiveData == 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
+        <import type="android.view.View"/>
 
         <variable
             name="viewModel"

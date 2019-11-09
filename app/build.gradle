@@ -10,6 +10,15 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        def googleMapApiKey = properties.getProperty('google.map.key')
+
+
+
+        resValue "string", "google_map_api_key", googleMapApiKey
+
     }
     buildTypes {
         release {

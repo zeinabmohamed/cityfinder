@@ -62,7 +62,6 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
                 ((CitiesListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(cityData);
 
                 binding.citiesRecyclerView.getAdapter().notifyDataSetChanged();
-
             }
         });
 

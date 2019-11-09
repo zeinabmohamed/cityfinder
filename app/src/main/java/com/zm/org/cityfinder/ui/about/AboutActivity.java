@@ -23,7 +23,7 @@ public class AboutActivity extends AppCompatActivity implements About.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_about);
         AboutPresenterImpl aboutPresenter = new AboutPresenterImpl(this, this);
         companyName = findViewById(R.id.companyName);
         companyAddress = findViewById(R.id.companyAdress);
