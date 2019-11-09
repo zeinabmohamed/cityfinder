@@ -5,7 +5,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPadding="@dimen/space_8dp"
+        app:contentPadding="@dimen/space_16dp"
+        app:cardCornerRadius="@dimen/space_8dp"
         android:layout_marginBottom="@dimen/space_8dp"
          >
 
@@ -19,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{cityData.getTitle()}"
-            android:layout_marginBottom="@dimen/space_8dp"
+            android:layout_marginBottom="@dimen/space_16dp"
             android:id="@+id/cityName"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,10 +28,17 @@
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/cityCoord"
             android:text="@{cityData.getCoord()}"
             app:layout_constraintTop_toBottomOf="@+id/cityName" />
 
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/cityName"
+            android:src="@drawable/ic_arrow_24dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

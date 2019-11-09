@@ -14,10 +14,12 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/citySearchView"
             android:layout_width="match_parent"
+            app:defaultQueryHint="@string/type_city_name"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:iconifiedByDefault="false"
             app:queryTextListener="@{viewModel.onQueryTextListener}" />
 
         <androidx.recyclerview.widget.RecyclerView
