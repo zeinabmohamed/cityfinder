@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.zm.org.cityfinder.R;
 import com.zm.org.cityfinder.databinding.CitiesListFragmentBinding;
 import com.zm.org.cityfinder.model.dto.CityData;
+import com.zm.org.cityfinder.ui.map.MapFragment;
 
 import java.util.List;
 
@@ -68,10 +69,11 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
     }
 
     @Override
-    public void onItemClick(CityData item) {
+    public void onItemClick(CityData cityData) {
         // navigate to MapFragment
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, CitiesListFragment.newInstance())
-                .commitNow();
+                .add(R.id.container, MapFragment.newInstance(cityData))
+                .addToBackStack(null)
+                .commit();
     }
 }

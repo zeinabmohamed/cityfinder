@@ -4,7 +4,9 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CityData {
+import java.io.Serializable;
+
+public class CityData implements Serializable {
 
     /**
      * country : UA
@@ -22,7 +24,7 @@ public class CityData {
     @SerializedName("coord")
     public Coord coord;
 
-    public static class Coord {
+    public static class Coord implements Serializable{
         /**
          * lon : 34.283333
          * lat : 44.549999
