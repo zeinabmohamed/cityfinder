@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/space_16dp"
-        tools:context=".ui.main.CitiesListFragment">
+        tools:context=".ui.citieslist.CitiesListFragment">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/citySearchView"
@@ -41,11 +41,11 @@
 
         <variable
             name="viewModel"
-            type="com.zm.org.cityfinder.ui.main.CitiesListViewModel" />
+            type="com.zm.org.cityfinder.ui.citieslist.CitiesListViewModel" />
 
         <variable
             name="adapter"
-            type="com.zm.org.cityfinder.ui.main.CitiesListAdapter" />
+            type="com.zm.org.cityfinder.ui.citieslist.CitiesListAdapter" />
     </data>
 
 </layout>

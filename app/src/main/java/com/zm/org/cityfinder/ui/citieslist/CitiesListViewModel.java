@@ -1,4 +1,4 @@
-package com.zm.org.cityfinder.ui.main;
+package com.zm.org.cityfinder.ui.citieslist;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,7 +14,6 @@ import com.zm.org.cityfinder.model.dto.CityData;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class CitiesListViewModel extends ViewModel {
 

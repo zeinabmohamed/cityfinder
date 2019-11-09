@@ -1,7 +1,6 @@
-package com.zm.org.cityfinder.ui.main;
+package com.zm.org.cityfinder.ui.citieslist;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ListAdapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +21,7 @@ import com.zm.org.cityfinder.model.dto.CityData;
 
 import java.util.List;
 
-public class CitiesListFragment extends Fragment {
+public class CitiesListFragment extends Fragment implements CitiesListAdapter.OnItemClickListener {
 
     private CitiesListViewModel citiesListViewModel;
     private CitiesListFragmentBinding binding;
@@ -42,7 +40,7 @@ public class CitiesListFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.cities_list_fragment, container, false);
         citiesListViewModel = ViewModelProviders.of(this).get(CitiesListViewModel.class);
         binding.setViewModel(citiesListViewModel);
-        binding.setAdapter(new CitiesListAdapter());
+        binding.setAdapter(new CitiesListAdapter(this));
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
 
@@ -69,4 +67,11 @@ public class CitiesListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onItemClick(CityData item) {
+        // navigate to MapFragment
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, CitiesListFragment.newInstance())
+                .commitNow();
+    }
 }

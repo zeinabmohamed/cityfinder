@@ -15,7 +15,6 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 
 public class CitiesDataSource {
 
@@ -35,7 +34,7 @@ public class CitiesDataSource {
                     LinkedList<CityData> cityDataList = new Gson().fromJson(citiesJson, listType);
 
                     Log.i("data", "Load json cities " + cityDataList.size());
-                    // sort data city name 1'st then city country
+                    // sort data city name 1'st then city country 2'nd
 
                     Collections.sort(cityDataList, new Comparator<CityData>() {
                         @Override

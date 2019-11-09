@@ -1,4 +1,4 @@
-package com.zm.org.cityfinder.ui.main;
+package com.zm.org.cityfinder.ui.citieslist;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -15,8 +15,11 @@ import com.zm.org.cityfinder.model.dto.CityData;
 
 public class CitiesListAdapter extends ListAdapter<CityData, CitiesListAdapter.CityViewHolder> {
 
-    protected CitiesListAdapter() {
+    private OnItemClickListener listener;
+
+    protected CitiesListAdapter(OnItemClickListener listener) {
         super( DIFF_CALLBACK);
+        this.listener = listener;
     }
 
     @NonNull
@@ -30,7 +33,7 @@ public class CitiesListAdapter extends ListAdapter<CityData, CitiesListAdapter.C
     @Override
     public void onBindViewHolder(@NonNull CityViewHolder holder, int position) {
 
-        holder.bind(getItem(position));
+        holder.bind(getItem(position),listener);
     }
 
     public static class CityViewHolder extends RecyclerView.ViewHolder {
@@ -42,8 +45,9 @@ public class CitiesListAdapter extends ListAdapter<CityData, CitiesListAdapter.C
             this.rowCityViewBinding = rowCityViewBinding;
         }
 
-        public void bind(CityData cityData) {
+        public void bind(CityData cityData, OnItemClickListener listener) {
             rowCityViewBinding.setCityData(cityData);
+            rowCityViewBinding.setOnItemClickListener(listener);
         }
     }
     public static final DiffUtil.ItemCallback<CityData> DIFF_CALLBACK =
@@ -64,7 +68,9 @@ public class CitiesListAdapter extends ListAdapter<CityData, CitiesListAdapter.C
                 }
             };
 
-
+    public interface OnItemClickListener {
+        void onItemClick(CityData item);
+    }
 }
 
 

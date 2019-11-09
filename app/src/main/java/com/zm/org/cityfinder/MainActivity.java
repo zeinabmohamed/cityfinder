@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.zm.org.cityfinder.ui.main.CitiesListFragment;
+import com.zm.org.cityfinder.ui.citieslist.CitiesListFragment;
 
 public class MainActivity extends AppCompatActivity {
 

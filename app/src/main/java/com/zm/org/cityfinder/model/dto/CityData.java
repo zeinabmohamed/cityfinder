@@ -38,4 +38,12 @@ public class CityData {
     public boolean equals(@Nullable Object obj) {
         return ((CityData)obj).name.toLowerCase().startsWith(this.name.toLowerCase());
     }
+
+    public String getTitle() {
+        return name + " , "+ country;
+    }
+
+    public String getCoord() {
+        return coord.lat +" , " + coord.lon;
+    }
 }

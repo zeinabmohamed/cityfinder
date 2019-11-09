@@ -11,13 +11,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:onClick="@{viewModel.onCityItemClicked(cityData)}"
         android:layout_height="wrap_content">
 
         <TextView
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{cityData.name}"
+            android:text="@{cityData.getTitle()}"
             android:layout_marginBottom="@dimen/space_8dp"
             android:id="@+id/cityName"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +27,7 @@
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{cityData.country}"
+            android:text="@{cityData.getCoord()}"
             app:layout_constraintTop_toBottomOf="@+id/cityName" />
 
 
@@ -34,6 +35,10 @@
     </androidx.cardview.widget.CardView>
 
     <data>
+
+        <variable
+            name="onItemClickListener"
+            type="com.zm.org.cityfinder.ui.citieslist.CitiesListAdapter.OnItemClickListener" />
 
         <variable
             name="cityData"
