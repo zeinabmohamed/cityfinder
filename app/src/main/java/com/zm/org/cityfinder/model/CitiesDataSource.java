@@ -14,11 +14,12 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CitiesDataSource {
 
-    public void loadCities(final MutableLiveData<List<CityData>> citiesListResponseLiveData, final Context context) {
+    public void loadCities(final MutableLiveData<LinkedList<CityData>> citiesListResponseLiveData, final Context context) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -29,9 +30,9 @@ public class CitiesDataSource {
                     inputStream.read(buffer);
                     inputStream.close();
                     String citiesJson = new String(buffer);
-                    Type listType = new TypeToken<List<CityData>>() {
+                    Type listType = new TypeToken<LinkedList<CityData>>() {
                     }.getType();
-                    List<CityData> cityDataList = new Gson().fromJson(citiesJson, listType);
+                    LinkedList<CityData> cityDataList = new Gson().fromJson(citiesJson, listType);
 
                     Log.i("data", "Load json cities " + cityDataList.size());
                     // sort data city name 1'st then city country

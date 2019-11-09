@@ -57,9 +57,11 @@ public class CitiesListFragment extends Fragment {
             @Override
             public void onChanged(List<CityData> cityData) {
                 Log.d("data", "cityData " + cityData.size());
-                ((ListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(null);
+                // just work around to force update the adapter list as mention here
+                ((CitiesListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(null);
+                // update adapter with list
+                ((CitiesListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(cityData);
 
-                ((ListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(cityData);
                 binding.citiesRecyclerView.getAdapter().notifyDataSetChanged();
 
             }

@@ -33,8 +33,6 @@ public class CitiesListAdapter extends ListAdapter<CityData, CitiesListAdapter.C
         holder.bind(getItem(position));
     }
 
-
-
     public static class CityViewHolder extends RecyclerView.ViewHolder {
 
         private RowCityViewBinding rowCityViewBinding;

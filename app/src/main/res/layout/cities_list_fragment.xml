@@ -3,7 +3,42 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/space_16dp"
+        tools:context=".ui.main.CitiesListFragment">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/citySearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryTextListener="@{viewModel.onQueryTextListener}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/citiesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:adapter="@{adapter}"
+            android:layout_marginTop="@dimen/space_16dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/citySearchView"
+            app:spanCount="1"
+            tools:layout_editor_absoluteX="16dp"
+            tools:listitem="@layout/row_city_view" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
         <variable
             name="viewModel"
             type="com.zm.org.cityfinder.ui.main.CitiesListViewModel" />
@@ -12,39 +47,6 @@
             name="adapter"
             type="com.zm.org.cityfinder.ui.main.CitiesListAdapter" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main"
-    android:padding="@dimen/space_16dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.CitiesListFragment">
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/citySearchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background_normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:queryTextListener="@{viewModel.onQueryTextListener}"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/citiesRecyclerView"
-        tools:listitem="@layout/row_city_view"
-        app:spanCount="1"
-        android:adapter="@{adapter}"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/citySearchView"
-        tools:layout_editor_absoluteX="16dp" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
 
