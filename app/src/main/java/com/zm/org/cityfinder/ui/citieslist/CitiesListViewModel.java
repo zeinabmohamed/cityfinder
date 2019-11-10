@@ -18,45 +18,25 @@ import java.util.List;
 
 public class CitiesListViewModel extends ViewModel {
 
-    public MediatorLiveData<List<CityData>> cityDataListLiveData;
-    private MutableLiveData<LinkedList<CityData>> citiesListResponseLiveData;
+    public MediatorLiveData<List<CityData>> cityDataListLiveData = new MediatorLiveData();
+    public MutableLiveData<CityData> citySelected =  new MutableLiveData<>();
+    private MutableLiveData<LinkedList<CityData>> citiesListResponseLiveData = new MutableLiveData<>();
 
     private CitiesDataSource citiesDataSource = new CitiesDataSource();
     private MutableLiveData<String> searchQueryTextLiveData = new MutableLiveData();
     public MutableLiveData<Integer> progressBarVisibilityLiveData = new MutableLiveData();
 
     public CitiesListViewModel() {
-        cityDataListLiveData = new MediatorLiveData();
-    }
 
-    public SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-            return false;
-        }
 
-        @Override
-        public boolean onQueryTextChange(final String newText) {
-            //Do something after 100ms
-            Log.i("data", "onQueryTextChange: " + newText);
-            searchQueryTextLiveData.postValue(newText);
-            return true;
-        }
-    };
-
-    public void loadCities(final Context context) {
-
-        citiesListResponseLiveData = new MutableLiveData<>();
-        progressBarVisibilityLiveData.postValue(View.VISIBLE);
-        citiesDataSource.loadCities(citiesListResponseLiveData, context);
         cityDataListLiveData.addSource(citiesListResponseLiveData, new Observer<LinkedList<CityData>>() {
             @Override
             public void onChanged(LinkedList<CityData> cityData) {
                 Log.i("data", "citiesListResponseLiveData : " + cityData.size());
                 updateViewWithData(cityData);
+
             }
         });
-
         cityDataListLiveData.addSource(searchQueryTextLiveData, new Observer<String>() {
             @Override
             public void onChanged(final String searchQueryText) {
@@ -64,7 +44,6 @@ public class CitiesListViewModel extends ViewModel {
                     @Override
                     public void run() {
                         Log.i("data", "start  searchQueryText " + searchQueryText);
-
                         if (citiesListResponseLiveData.getValue() != null &&
                                 !citiesListResponseLiveData.getValue().isEmpty()) {
 
@@ -113,8 +92,32 @@ public class CitiesListViewModel extends ViewModel {
         });
     }
 
+
+    public void loadCities(Context context) {
+        if(citiesListResponseLiveData.getValue() == null) {
+            progressBarVisibilityLiveData.postValue(View.VISIBLE);
+            citiesDataSource.loadCities(citiesListResponseLiveData,context);
+        }
+    }
+    public SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(final String newText) {
+            //Do something after 100ms
+            Log.i("data", "onQueryTextChange: " + newText);
+            searchQueryTextLiveData.postValue(newText);
+            return true;
+        }
+    };
+
+
     private void updateViewWithData(List citiesList) {
         cityDataListLiveData.postValue(citiesList);
         progressBarVisibilityLiveData.postValue(View.GONE);
     }
+
 }

@@ -20,7 +20,6 @@ import com.zm.org.cityfinder.MainActivity;
 import com.zm.org.cityfinder.R;
 import com.zm.org.cityfinder.databinding.CitiesListFragmentBinding;
 import com.zm.org.cityfinder.model.dto.CityData;
-import com.zm.org.cityfinder.ui.map.MapFragment;
 
 import java.util.List;
 
@@ -40,13 +39,27 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
         updateHeader();
     }
 
+
+    private void updateHeader() {
+        ((MainActivity) getActivity()).updateTitle(getString(R.string.type_city_name));
+        ((MainActivity) getActivity()).showBackButton(false);
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        citiesListViewModel = ViewModelProviders.of(getActivity()).get(CitiesListViewModel.class);
+        citiesListViewModel.loadCities(getContext());
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.cities_list_fragment, container, false);
-        citiesListViewModel = ViewModelProviders.of(this).get(CitiesListViewModel.class);
         binding.setViewModel(citiesListViewModel);
         binding.setAdapter(new CitiesListAdapter(this));
         binding.setLifecycleOwner(getViewLifecycleOwner());
@@ -54,17 +67,11 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
 
     }
 
-    private void updateHeader() {
-        ((MainActivity) getActivity()).updateTitle(getString(R.string.type_city_name));
-        ((MainActivity) getActivity()).showBackButton(false);
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        citiesListViewModel.loadCities(getContext());
 
-        citiesListViewModel.cityDataListLiveData.observe(this, new Observer<List<CityData>>() {
+        citiesListViewModel.cityDataListLiveData.observe(getViewLifecycleOwner(), new Observer<List<CityData>>() {
             @Override
             public void onChanged(List<CityData> cityData) {
                 Log.d("data", "cityData " + cityData.size());
@@ -74,17 +81,19 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
                 ((CitiesListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(cityData);
 
                 binding.citiesRecyclerView.getAdapter().notifyDataSetChanged();
+                if (((MainActivity)getActivity()).isLandScapeMode()) {
+                    // handle in landscape mode show inflate mapFragment  with 1'st city
+                    // or last selected city if exist
+                    if(citiesListViewModel.citySelected.getValue() == null) {
+                        citiesListViewModel.citySelected.postValue(cityData.get(0));
+                    }
+                }
             }
         });
-
     }
 
     @Override
     public void onItemClick(CityData cityData) {
-        // navigate to MapFragment
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, MapFragment.newInstance(cityData))
-                .addToBackStack(null)
-                .commit();
+        citiesListViewModel.citySelected.postValue(cityData);
     }
 }
