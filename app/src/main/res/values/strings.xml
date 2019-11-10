@@ -5,4 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="about">About</string>
     <string name="type_city_name">Type city name</string>
+    <string name="city_coord">City coordination</string>
+    <string name="about_info">About info</string>
 </resources>

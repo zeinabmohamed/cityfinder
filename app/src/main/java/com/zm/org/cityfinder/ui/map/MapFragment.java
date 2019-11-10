@@ -3,6 +3,7 @@ package com.zm.org.cityfinder.ui.map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.zm.org.cityfinder.MainActivity;
 import com.zm.org.cityfinder.R;
 import com.zm.org.cityfinder.databinding.MapFragmentBinding;
 import com.zm.org.cityfinder.model.dto.CityData;
@@ -59,6 +61,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateHeader();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -75,6 +83,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         return binding.getRoot();
+    }
+
+    private void updateHeader() {
+        if(cityData != null && !TextUtils.isEmpty(cityData.name)){
+            ((MainActivity)getActivity() ).updateTitle(cityData.name);
+        }else{
+            ((MainActivity)getActivity() ).updateTitle(getString(R.string.city_coord));
+        }
+        ((MainActivity)getActivity() ).showBackButton(true);
     }
 
     private void navigateToAboutInfo() {

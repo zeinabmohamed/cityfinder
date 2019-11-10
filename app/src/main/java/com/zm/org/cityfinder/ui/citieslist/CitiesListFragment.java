@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zm.org.cityfinder.MainActivity;
 import com.zm.org.cityfinder.R;
 import com.zm.org.cityfinder.databinding.CitiesListFragmentBinding;
 import com.zm.org.cityfinder.model.dto.CityData;
@@ -32,6 +34,11 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateHeader();
+    }
 
     @Nullable
     @Override
@@ -45,6 +52,11 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
 
+    }
+
+    private void updateHeader() {
+        ((MainActivity) getActivity()).updateTitle(getString(R.string.type_city_name));
+        ((MainActivity) getActivity()).showBackButton(false);
     }
 
     @Override

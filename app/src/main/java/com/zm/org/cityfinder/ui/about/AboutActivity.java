@@ -1,9 +1,11 @@
 package com.zm.org.cityfinder.ui.about;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zm.org.cityfinder.R;
@@ -24,6 +26,8 @@ public class AboutActivity extends AppCompatActivity implements About.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getString(R.string.about_info));
         AboutPresenterImpl aboutPresenter = new AboutPresenterImpl(this, this);
         companyName = findViewById(R.id.companyName);
         companyAddress = findViewById(R.id.companyAdress);
@@ -76,4 +80,16 @@ public class AboutActivity extends AppCompatActivity implements About.View {
     public void hideProgress() {
         progressBar.setVisibility(android.view.View.GONE);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
