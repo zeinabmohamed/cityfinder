@@ -19,7 +19,7 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{cityData.getTitle()}"
+            android:text='@{cityData.name + " , "+ cityData.country}'
             android:layout_marginBottom="@dimen/space_16dp"
             android:id="@+id/cityName"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cityCoord"
-            android:text="@{cityData.getCoord()}"
+            android:text='@{cityData.lat +" , " +cityData.lon}'
             app:layout_constraintTop_toBottomOf="@+id/cityName" />
 
 

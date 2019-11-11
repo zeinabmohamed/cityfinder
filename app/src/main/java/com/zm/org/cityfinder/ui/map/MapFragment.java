@@ -101,15 +101,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        LatLng cityCoordLatLng =  new LatLng(cityData.coord.lat, cityData.coord.lon);
         // create marker
         MarkerOptions marker = new MarkerOptions().position(
-                cityCoordLatLng).title(cityData.name);
+                new LatLng(cityData.lat, cityData.lon)).title(cityData.name);
 
         // adding marker
         googleMap.addMarker(marker);
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(cityCoordLatLng).zoom(17).build();
+                .target(new LatLng(cityData.lat, cityData.lon)).zoom(17).build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }

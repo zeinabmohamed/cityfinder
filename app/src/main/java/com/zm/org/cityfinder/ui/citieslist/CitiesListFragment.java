@@ -2,6 +2,7 @@ package com.zm.org.cityfinder.ui.citieslist;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +27,7 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
 
     private CitiesListViewModel citiesListViewModel;
     private CitiesListFragmentBinding binding;
+    private ViewModelProvider.Factory citiesListViewModelFactory =  new CitiesListViewModel.CitiesListViewModelFactory(getContext());
 
     public static CitiesListFragment newInstance() {
         return new CitiesListFragment();
@@ -49,8 +50,7 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        citiesListViewModel = ViewModelProviders.of(getActivity()).get(CitiesListViewModel.class);
-        citiesListViewModel.loadCities(getContext());
+        citiesListViewModel = ViewModelProviders.of(getActivity(), citiesListViewModelFactory).get(CitiesListViewModel.class);
 
     }
 
@@ -81,12 +81,10 @@ public class CitiesListFragment extends Fragment implements CitiesListAdapter.On
                 ((CitiesListAdapter) binding.citiesRecyclerView.getAdapter()).submitList(cityData);
 
                 binding.citiesRecyclerView.getAdapter().notifyDataSetChanged();
-                if (((MainActivity)getActivity()).isLandScapeMode()) {
-                    // handle in landscape mode show inflate mapFragment  with 1'st city
-                    // or last selected city if exist
-                    if(citiesListViewModel.citySelected.getValue() == null) {
-                        citiesListViewModel.citySelected.postValue(cityData.get(0));
-                    }
+                // handle in landscape mode show inflate mapFragment  with 1'st city
+                // or last selected city if exist
+                if (((MainActivity) getActivity()).isLandScapeMode() && citiesListViewModel.citySelected.getValue() == null) {
+                    citiesListViewModel.citySelected.postValue(cityData.get(0));
                 }
             }
         });

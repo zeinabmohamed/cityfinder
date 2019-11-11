@@ -4,11 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.zm.org.cityfinder.model.CitiesDataSource;
 import com.zm.org.cityfinder.model.dto.CityData;
@@ -20,21 +23,23 @@ public class CitiesListViewModel extends ViewModel {
 
     public MediatorLiveData<List<CityData>> cityDataListLiveData = new MediatorLiveData();
     public MutableLiveData<CityData> citySelected =  new MutableLiveData<>();
-    private MutableLiveData<LinkedList<CityData>> citiesListResponseLiveData = new MutableLiveData<>();
+    private LiveData<List<CityData>> citiesListResponseLiveData ;
 
-    private CitiesDataSource citiesDataSource = new CitiesDataSource();
     private MutableLiveData<String> searchQueryTextLiveData = new MutableLiveData();
     public MutableLiveData<Integer> progressBarVisibilityLiveData = new MutableLiveData();
 
-    public CitiesListViewModel() {
+    public CitiesListViewModel(CitiesDataSource citiesDataSource) {
 
+        if(citiesListResponseLiveData == null) {
+            progressBarVisibilityLiveData.postValue(View.VISIBLE);
+            citiesListResponseLiveData =   citiesDataSource.loadCities();
+        }
 
-        cityDataListLiveData.addSource(citiesListResponseLiveData, new Observer<LinkedList<CityData>>() {
+        cityDataListLiveData.addSource(citiesListResponseLiveData, new Observer<List<CityData>>() {
             @Override
-            public void onChanged(LinkedList<CityData> cityData) {
+            public void onChanged(List<CityData> cityData) {
                 Log.i("data", "citiesListResponseLiveData : " + cityData.size());
                 updateViewWithData(cityData);
-
             }
         });
         cityDataListLiveData.addSource(searchQueryTextLiveData, new Observer<String>() {
@@ -56,8 +61,7 @@ public class CitiesListViewModel extends ViewModel {
 
                             // as long we sort the data we don't need to check all of the data
                             // so we will cut the list from the starting index of searchTextQuery
-                            CityData cityData = new CityData();
-                            cityData.name = searchQueryText;
+                            CityData cityData = new CityData(searchQueryText);
 
                             List citiesList = new LinkedList<CityData>();
 
@@ -93,12 +97,6 @@ public class CitiesListViewModel extends ViewModel {
     }
 
 
-    public void loadCities(Context context) {
-        if(citiesListResponseLiveData.getValue() == null) {
-            progressBarVisibilityLiveData.postValue(View.VISIBLE);
-            citiesDataSource.loadCities(citiesListResponseLiveData,context);
-        }
-    }
     public SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -120,4 +118,20 @@ public class CitiesListViewModel extends ViewModel {
         progressBarVisibilityLiveData.postValue(View.GONE);
     }
 
+
+    public static class CitiesListViewModelFactory implements ViewModelProvider.Factory{
+
+        private Context context;
+
+        public CitiesListViewModelFactory(Context context){
+
+            this.context = context;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new CitiesListViewModel( new CitiesDataSource(context));
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.zm.org.cityfinder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private CitiesListViewModel citiesListViewModel;
+    private ViewModelProvider.Factory citiesListViewModelFactory =  new CitiesListViewModel.CitiesListViewModelFactory(this);
 
     private boolean isLandScapeMode = true;
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        citiesListViewModel = ViewModelProviders.of(this).get(CitiesListViewModel.class);
+        citiesListViewModel = ViewModelProviders.of(this,citiesListViewModelFactory).get(CitiesListViewModel.class);
 
         // Check whether the activity is using the layout version with
         // the container FrameLayout. If so, we must add the first fragment
@@ -84,12 +86,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
