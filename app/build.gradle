@@ -18,6 +18,9 @@ android {
 
 
         resValue "string", "google_map_api_key", googleMapApiKey
+        testOptions {
+            unitTests.returnDefaultValues = true
+        }
 
     }
     buildTypes {
@@ -45,4 +48,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.8.9'
+    testImplementation "android.arch.core:core-testing:1.1.1"
+
 }

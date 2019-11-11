@@ -25,7 +25,7 @@ public class CitiesListViewModel extends ViewModel {
     public MutableLiveData<CityData> citySelected =  new MutableLiveData<>();
     private LiveData<List<CityData>> citiesListResponseLiveData ;
 
-    private MutableLiveData<String> searchQueryTextLiveData = new MutableLiveData();
+    public MutableLiveData<String> searchQueryTextLiveData = new MutableLiveData();
     public MutableLiveData<Integer> progressBarVisibilityLiveData = new MutableLiveData();
 
     private String TAG = CitiesListViewModel.class.getSimpleName();
@@ -75,6 +75,11 @@ public class CitiesListViewModel extends ViewModel {
                                 return;
                             }
                             citiesList = citiesListResponseLiveData.getValue().subList(startIndex, citiesListResponseLiveData.getValue().size() - 1);
+                            if(citiesList.size() ==0){
+                                 citiesList.add(citiesListResponseLiveData.getValue().get(startIndex));
+                                updateViewWithData(citiesList);
+                                return;
+                            }
                             int lastIndex = citiesList.lastIndexOf(cityData);
 
                             Log.d(TAG, "end  lastIndex " + lastIndex);
