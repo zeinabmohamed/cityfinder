@@ -1,4 +1,4 @@
-# cityfinder
+# City Finder
 
 ## Instructions :
     - Add `google.map.key` with your google map Apikey in local.properties.
