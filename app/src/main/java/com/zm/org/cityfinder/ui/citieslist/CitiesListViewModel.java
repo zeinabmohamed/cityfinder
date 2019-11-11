@@ -28,6 +28,7 @@ public class CitiesListViewModel extends ViewModel {
     private MutableLiveData<String> searchQueryTextLiveData = new MutableLiveData();
     public MutableLiveData<Integer> progressBarVisibilityLiveData = new MutableLiveData();
 
+    private String TAG = CitiesListViewModel.class.getSimpleName();
     public CitiesListViewModel(CitiesDataSource citiesDataSource) {
 
         if(citiesListResponseLiveData == null) {
@@ -38,7 +39,7 @@ public class CitiesListViewModel extends ViewModel {
         cityDataListLiveData.addSource(citiesListResponseLiveData, new Observer<List<CityData>>() {
             @Override
             public void onChanged(List<CityData> cityData) {
-                Log.i("data", "citiesListResponseLiveData : " + cityData.size());
+                Log.d(TAG, "citiesListResponseLiveData : " + cityData.size());
                 updateViewWithData(cityData);
             }
         });
@@ -48,7 +49,7 @@ public class CitiesListViewModel extends ViewModel {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("data", "start  searchQueryText " + searchQueryText);
+                        Log.d(TAG, "start  searchQueryText " + searchQueryText);
                         if (citiesListResponseLiveData.getValue() != null &&
                                 !citiesListResponseLiveData.getValue().isEmpty()) {
 
@@ -66,7 +67,7 @@ public class CitiesListViewModel extends ViewModel {
                             List citiesList = new LinkedList<CityData>();
 
                             int startIndex = citiesListResponseLiveData.getValue().indexOf(cityData);
-                            Log.i("data", "start  startIndex " + startIndex);
+                            Log.d(TAG, "start  startIndex " + startIndex);
 
                             // if not success to get filtered result will empty list
                             if (startIndex == -1) {
@@ -76,7 +77,7 @@ public class CitiesListViewModel extends ViewModel {
                             citiesList = citiesListResponseLiveData.getValue().subList(startIndex, citiesListResponseLiveData.getValue().size() - 1);
                             int lastIndex = citiesList.lastIndexOf(cityData);
 
-                            Log.i("data", "end  lastIndex " + lastIndex);
+                            Log.d(TAG, "end  lastIndex " + lastIndex);
 
                             // if not success to get filtered result will empty list
                             if (lastIndex == -1) {
@@ -106,7 +107,7 @@ public class CitiesListViewModel extends ViewModel {
         @Override
         public boolean onQueryTextChange(final String newText) {
             //Do something after 100ms
-            Log.i("data", "onQueryTextChange: " + newText);
+            Log.d(TAG, "onQueryTextChange: " + newText);
             searchQueryTextLiveData.postValue(newText);
             return true;
         }
